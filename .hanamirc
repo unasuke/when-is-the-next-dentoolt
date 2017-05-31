@@ -1,0 +1,4 @@
+project=when_is_the_next_dentoolt
+architecture=container
+test=minitest
+template=erb
