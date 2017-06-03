@@ -63,5 +63,8 @@
 			"revisionTime": "2017-04-07T17:21:22Z"
 		}
 	],
-	"rootPath": "github.com/unasuke/when-is-the-next-dentoolt"
+	"rootPath": "github.com/unasuke/when-is-the-next-dentoolt",
+	"heroku": {
+		"goVersion": "go1.8"
+	}
 }
