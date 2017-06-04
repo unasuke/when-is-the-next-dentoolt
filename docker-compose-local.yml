@@ -1,0 +1,50 @@
+version: '2'
+services:
+  ruby-hanami:
+    build:
+      dockerfile: ruby/hanami/Dockerfile
+      context: .
+    environment:
+      - PORT=8101
+    ports:
+      - "8101:8101"
+    restart: always
+  ruby-sinatra:
+    build:
+      dockerfile: ruby/sinatra/Dockerfile
+      context: .
+    environment:
+      - PORT=8102
+    ports:
+      - "8102:8102"
+    restart: always
+  python-kobin:
+    build:
+      dockerfile: python/kobin/Dockerfile
+      context: .
+    environment:
+      - WSGICLI_PORT=8103
+    ports:
+      - "8103:8103"
+    restart: always
+  golang-gin:
+    build:
+      dockerfile: golang/gin/Dockerfile
+      context: .
+    ports:
+      - "8104:8104"
+    restart: always
+  nginx:
+    build:
+      dockerfile: nginx/Dockerfile.local
+      context: .
+    environment:
+      - NGINX_SERVER_NAME=localhost
+    ports:
+      - "8000:80"
+    links:
+      - ruby-sinatra
+      - ruby-hanami
+      - python-kobin
+      - golang-gin
+    restart: always

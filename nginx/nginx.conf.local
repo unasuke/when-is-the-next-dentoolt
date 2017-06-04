@@ -1,0 +1,58 @@
+# -*- mode: nginx -*-
+# vi: set ft=nginx :
+
+load_module /etc/nginx/modules/ngx_http_perl_module.so;
+
+user nginx;
+
+env NGINX_SERVER_NAME;
+
+worker_processes     auto;
+worker_rlimit_nofile 4096;
+
+events {
+  worker_connections 1024;
+  multi_accept       on;
+}
+
+http {
+  server_tokens off;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  perl_set $env_server_name 'sub { return $ENV{"NGINX_SERVER_NAME"}; }';
+
+  log_format ltsv "time:$time_local\t"
+                  "host:$remote_addr\t"
+                  "method:$request_method\t"
+                  "path:$request_uri\t"
+                  "version:$server_protocol\t"
+                  "status:$status\t"
+                  "size:$body_bytes_sent\t"
+                  "referer:$http_referer\t"
+                  "ua:$http_user_agent\t"
+                  "restime:$request_time\t"
+                  "ustime:$upstream_response_time\t"
+                  "request_id:$sent_http_x_request_id";
+  access_log /dev/stdout ltsv;
+  error_log  /dev/stdout warn;
+
+  keepalive_timeout 60;
+
+  upstream app {
+    server ruby-hanami:8101 fail_timeout=0;
+    server ruby-sinatra:8102 fail_timeout=0;
+    server python-kobin:8103 fail_timeout=0;
+    server golang-gin:8104 fail_timeout=0;
+  }
+
+  server {
+    listen 80 default_server;
+    server_name $env_server_name;
+
+    location / {
+      proxy_pass http://app;
+    }
+  }
+}
