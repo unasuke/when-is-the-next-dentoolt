@@ -51,7 +51,7 @@ services:
       - python-kobin
       - golang-gin
     restart: always
-  nginx-test:
+  nginx-local:
     build:
       dockerfile: nginx/Dockerfile.local
       context: .
