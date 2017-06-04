@@ -6,4 +6,4 @@ COPY ruby/hanami/Gemfile ruby/hanami/Gemfile.lock /app/
 RUN bundle install
 
 COPY ruby/hanami/ /app/
-CMD bundle exec hanami server --host 0.0.0.0 --port 8000
+CMD bundle exec hanami server --host 0.0.0.0 --port PORT
