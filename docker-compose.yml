@@ -1,14 +1,5 @@
 version: '2'
 services:
-  ruby-hanami:
-    build:
-      dockerfile: ruby/hanami/Dockerfile
-      context: .
-    environment:
-      - PORT=8101
-    ports:
-      - "8101:8101"
-    restart: always
   ruby-sinatra:
     build:
       dockerfile: ruby/sinatra/Dockerfile
@@ -47,7 +38,6 @@ services:
       - "443:443"
     links:
       - ruby-sinatra
-      - ruby-hanami
       - python-kobin
       - golang-gin
     restart: always
@@ -61,7 +51,6 @@ services:
       - "8000:80"
     links:
       - ruby-sinatra
-      - ruby-hanami
       - python-kobin
       - golang-gin
     restart: always
