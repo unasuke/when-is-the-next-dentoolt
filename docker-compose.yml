@@ -1,5 +1,14 @@
 version: '2'
 services:
+  ruby-rack:
+    build:
+      dockerfile: ruby/rack/Dockerfile
+      context: .
+    environment:
+      - PORT=8101
+    ports:
+      - "8101:8101"
+    restart: always
   ruby-sinatra:
     build:
       dockerfile: ruby/sinatra/Dockerfile
@@ -37,6 +46,7 @@ services:
       - "80:80"
       - "443:443"
     links:
+      - ruby-rack
       - ruby-sinatra
       - python-kobin
       - golang-gin
@@ -50,6 +60,7 @@ services:
     ports:
       - "8000:80"
     links:
+      - ruby-rack
       - ruby-sinatra
       - python-kobin
       - golang-gin
